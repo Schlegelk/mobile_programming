@@ -15,11 +15,11 @@ class _MyWidgetState extends State<MyWidget> {
       length: 2,
       child: Scaffold(
           appBar: AppBar(
-            bottom: TabBar(
+            bottom: const TabBar(
               tabs: [Tab(text: "Followers"), Tab(text: "Following")],
             ),
           ),
-          body: TabBarView(
+          body: const TabBarView(
             children: [Text("followers"), Text("following")],
           )),
     );
