@@ -13,7 +13,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      drawer: const MyDrawer(),
+      drawer: MyDrawer(),
       appBar: AppBar(
         centerTitle: true,
         title: Text("H O M E"),

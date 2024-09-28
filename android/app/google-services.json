@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "84455423596",
+    "project_id": "mingl-6c303",
+    "storage_bucket": "mingl-6c303.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84455423596:android:661428d82d2dc639ae2249",
+        "android_client_info": {
+          "package_name": "app.mingl"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVESxdU-NSLy-5uWJEWpexJq7d0N7wWqg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84455423596:android:4f9a77eaef7d3387ae2249",
+        "android_client_info": {
+          "package_name": "com.example.social_media"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVESxdU-NSLy-5uWJEWpexJq7d0N7wWqg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

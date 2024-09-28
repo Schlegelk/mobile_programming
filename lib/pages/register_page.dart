@@ -1,64 +1,82 @@
 import 'package:flutter/material.dart';
-import 'package:social_media/components/my_button.dart';
 import 'package:social_media/components/my_loading_circle.dart';
-import 'package:social_media/components/my_text_field.dart';
 import 'package:social_media/services/auth/auth_service.dart';
 
+import '../components/my_button.dart';
+import '../components/my_text_field.dart';
+
 /*
-Login page
-pada laman ini, user yang sudah terdaftar (existing user) dapat log in menggunakan :
+REGISTER PAGE
+pengguna dapat membuat akun dengan mengisi :
+
+-nama
 -email
 -password
-yang sudah terdaftar sebelumnya
----------------------------------------------------------------------------------------
-jika log in berhasil maka user akan dilanjutkan ke home page
-jika user belum memiliki akun maka user dapat pergi ke register page
+-confirm password
 */
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
-
-  const LoginPage({super.key, required this.onTap});
+  const RegisterPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   // access auth service
   final _auth = AuthService();
 
   // text controllers
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController pwController = TextEditingController();
+  final TextEditingController confirPwController = TextEditingController();
 
-  // login method
-  void login() async {
-    // loading circle
-    showLoadingCircle(context);
+  // register button tapped
+  void register() async {
+    // password match -> create an user
+    if (pwController.text == confirPwController.text) {
+      // show loading circle
+      showLoadingCircle(context);
 
-    try {
-      // try login
-      await _auth.loginEmailPassword(emailController.text, pwController.text);
+      // attempt to register new user
+      try {
+        // register
+        await _auth.registerEmailPassword(
+          emailController.text,
+          pwController.text,
+        );
 
-      // succeed login then loading circle disappear
-      if (mounted) hideLoadingCircle(context);
+        // succeed register
+        if (mounted) hideLoadingCircle(context);
+      }
+
+      // catch errors
+      catch (e) {
+        // finished register
+        if (mounted) hideLoadingCircle(context);
+
+        // let user know if there is error
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(e.toString()),
+            ),
+          );
+        }
+      }
     }
 
-    // catch errors
-    catch (e) {
-      // finished loading
-      if (mounted) hideLoadingCircle(context);
-
-      // let user know if there is error
-      if (mounted) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(e.toString()),
-          ),
-        );
-      }
+    // password didn't match -> show error
+    else {
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          title: Text("Passwords don't match!"),
+        ),
+      );
     }
   }
 
@@ -84,9 +102,9 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 50),
 
-                //welcome back message
+                // create an account message
                 Text(
-                  "Welcome to Mingl app!",
+                  "Let's create an account",
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                     fontSize: 16,
@@ -94,6 +112,15 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 const SizedBox(height: 25),
+
+                // tempat untuk mengisi nama
+                MyTextField(
+                  controller: nameController,
+                  hintText: "Name",
+                  obscureText: false,
+                ),
+
+                const SizedBox(height: 10),
 
                 // tempat untuk mengisi email
                 MyTextField(
@@ -113,43 +140,39 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 10),
 
-                // forgot password
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    "Forgot Password?",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                // tempat untuk mengisi confirm password
+                MyTextField(
+                  controller: confirPwController,
+                  hintText: "Confirm password",
+                  obscureText: true,
                 ),
+
                 const SizedBox(height: 25),
 
-                // sign in button
+                // sign up button
                 MyButton(
-                  text: "Login",
-                  onTap: login,
+                  text: "Register",
+                  onTap: register,
                 ),
 
                 const SizedBox(height: 50),
 
-                //Not a member? Register now
+                // already a member? Login here!
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Not a member?",
+                      "Already a member?",
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.primary),
                     ),
                     const SizedBox(width: 5),
 
-                    //pengguna dapat menekan tombol register page
+                    //pengguna dapat menekan tombol login page
                     GestureDetector(
                       onTap: widget.onTap,
                       child: Text(
-                        "Register",
+                        "Login",
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.bold,
