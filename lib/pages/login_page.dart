@@ -66,99 +66,101 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 50),
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 50),
 
-                // Icon / Logo
-                Icon(
-                  Icons.lock_open_rounded,
-                  size: 75,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-
-                const SizedBox(height: 50),
-
-                //welcome back message
-                Text(
-                  "Welcome to Mingl app!",
-                  style: TextStyle(
+                  // Icon / Logo
+                  Icon(
+                    Icons.lock_open_rounded,
+                    size: 75,
                     color: Theme.of(context).colorScheme.primary,
-                    fontSize: 16,
                   ),
-                ),
 
-                const SizedBox(height: 25),
+                  const SizedBox(height: 50),
 
-                // tempat untuk mengisi email
-                MyTextField(
-                  controller: emailController,
-                  hintText: "Email",
-                  obscureText: false,
-                ),
-
-                const SizedBox(height: 10),
-
-                // tempat untuk mengisi password
-                MyTextField(
-                  controller: pwController,
-                  hintText: "Enter password",
-                  obscureText: true,
-                ),
-
-                const SizedBox(height: 10),
-
-                // forgot password
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    "Forgot Password?",
+                  //welcome back message
+                  Text(
+                    "Welcome to Mingl app!",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
                   ),
-                ),
-                const SizedBox(height: 25),
 
-                // sign in button
-                MyButton(
-                  text: "Login",
-                  onTap: login,
-                ),
+                  const SizedBox(height: 25),
 
-                const SizedBox(height: 50),
+                  // tempat untuk mengisi email
+                  MyTextField(
+                    controller: emailController,
+                    hintText: "Email",
+                    obscureText: false,
+                  ),
 
-                //Not a member? Register now
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Not a member?",
+                  const SizedBox(height: 10),
+
+                  // tempat untuk mengisi password
+                  MyTextField(
+                    controller: pwController,
+                    hintText: "Enter password",
+                    obscureText: true,
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // forgot password
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      "Forgot Password?",
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                    const SizedBox(width: 5),
-
-                    //pengguna dapat menekan tombol register page
-                    GestureDetector(
-                      onTap: widget.onTap,
-                      child: Text(
-                        "Register",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
-                )
-              ],
+                  ),
+                  const SizedBox(height: 25),
+
+                  // sign in button
+                  MyButton(
+                    text: "Login",
+                    onTap: login,
+                  ),
+
+                  const SizedBox(height: 50),
+
+                  //Not a member? Register now
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Not a member?",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary),
+                      ),
+                      const SizedBox(width: 5),
+
+                      //pengguna dapat menekan tombol register page
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        child: Text(
+                          "Register",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
