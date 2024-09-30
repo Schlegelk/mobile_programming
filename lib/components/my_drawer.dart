@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:social_media/components/my_drawer_tile.dart';
+import 'package:social_media/pages/profile_page.dart';
 import 'package:social_media/pages/settings_page.dart';
+import 'package:social_media/services/auth/auth_service.dart';
 
 /*
 
@@ -21,7 +23,15 @@ Contains 5 menu options:
 */
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({super.key});
+  MyDrawer({super.key});
+
+  // access auth service
+  final _auth = AuthService();
+
+  // logout
+  void logout() {
+    _auth.logout();
+  }
 
   // Build UI
   @override
@@ -60,13 +70,30 @@ class MyDrawer extends StatelessWidget {
               ),
 
               // profile list tile
+              MyDrawerTile(
+                title: "P R O F I L E",
+                icon: Icons.person,
+                onTap: () {
+                  //pop menu drawer
+                  Navigator.pop(context);
+
+                  //go to profile page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ProfilePage(uid: _auth.getCurrentUid()),
+                    ),
+                  );
+                },
+              ),
 
               // search list tile
 
               // settings list tile
               MyDrawerTile(
                 title: "S E T T I N G S",
-                icon: Icons.settings,
+                icon: Icons.person,
                 onTap: () {
                   // pop menu drawer
                   Navigator.pop(context);
@@ -81,7 +108,14 @@ class MyDrawer extends StatelessWidget {
                 },
               ),
 
+              const Spacer(),
+
               // logout list tile
+              MyDrawerTile(
+                title: "L O G O U T",
+                icon: Icons.logout,
+                onTap: logout,
+              )
             ],
           ),
         ),
