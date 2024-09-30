@@ -95,6 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       // AppBar
       appBar: AppBar(
+        centerTitle: true,
         title: Text(_isLoading ? '' : user?.name ?? ''), // Null-aware operator
         foregroundColor: Theme.of(context).colorScheme.primary,
       ),

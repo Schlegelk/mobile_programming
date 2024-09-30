@@ -18,6 +18,7 @@ This class handles all the data from and to firebase,
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:social_media/models/post.dart';
 import 'package:social_media/models/user.dart';
 import 'package:social_media/services/auth/auth_service.dart';
 
@@ -94,6 +95,44 @@ class DatabaseService {
   POST MESSAGE
 
   */
+
+  // post a Message
+  Future<void> postMessageInFirebase(String message) async {
+    // try to post message
+    try {
+      // get current id
+      String uid = _auth.currentUser!.uid;
+
+      // use this uid to get the user's profile
+      UserProfile? user = await getUserFromFirebase(uid);
+
+      // create a new post object
+      Post newPost = Post(
+        id: '',
+        uid: uid,
+        name: user!.name,
+        username: user.username,
+        message: message,
+        timestamp: Timestamp.now(),
+        likeCount: 0,
+        likedBy: [],
+      );
+
+      // convert post object -> map
+      Map<String, dynamic> newPostMap = newPost.toMap();
+
+      // add to firebase
+      await _db.collection("Posts").add(newPostMap);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // delete a post
+
+  // get all post from firebase
+
+  // get individual post
 
   /*
 
