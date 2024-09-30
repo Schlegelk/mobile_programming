@@ -5,6 +5,7 @@ import 'package:social_media/components/my_input_alert_box.dart';
 import 'package:social_media/components/my_post_tile.dart';
 import 'package:social_media/helper/navigate_pages.dart';
 import 'package:social_media/models/user.dart';
+import 'package:social_media/pages/follow_button.dart';
 import 'package:social_media/services/auth/auth_service.dart';
 import 'package:social_media/services/database/database_provider.dart';
 
@@ -143,6 +144,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
             const SizedBox(height: 25),
 
+            // follow-unfollow button
+            MyFollowButton(onPressed: () {}),
+
             // Edit bio section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -202,7 +206,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                       // post tile UI
                       return MyPostTile(
-                        post: post, 
+                        post: post,
                         onUserTap: () {},
                         onPostTap: () => goPostPage(context, post),
                       );

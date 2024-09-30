@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
-class MyWidget extends StatefulWidget {
-  const MyWidget({super.key});
+class FollowListPage extends StatefulWidget {
+  const FollowListPage({super.key});
 
   @override
-  State<MyWidget> createState() => _MyWidgetState();
+  State<FollowListPage> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<MyWidget> {
+class _MyWidgetState extends State<FollowListPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -17,18 +17,20 @@ class _MyWidgetState extends State<MyWidget> {
         appBar: AppBar(
           bottom: const TabBar(
             tabs: [Tab(text: "Followers"), Tab(text: "Following")],
+            labelColor: Color.fromARGB(255, 135, 183, 222),
+            labelStyle: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         body: Container(
-          margin: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.secondary,
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Theme.of(context).colorScheme.inversePrimary,
                 blurRadius: 6,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
@@ -36,11 +38,11 @@ class _MyWidgetState extends State<MyWidget> {
             padding: const EdgeInsets.all(5.0),
             child: ListTile(
               // test name
-              title: Text("Bob"),
+              title: const Text("Bob"),
               titleTextStyle: TextStyle(
                   color: Theme.of(context).colorScheme.inversePrimary),
 
-              subtitle: Text('@bob_01'),
+              subtitle: const Text('@bob_01'),
               subtitleTextStyle:
                   TextStyle(color: Theme.of(context).colorScheme.primary),
 
