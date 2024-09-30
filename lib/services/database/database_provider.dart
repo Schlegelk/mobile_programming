@@ -62,7 +62,25 @@ class DatabaseProvider extends ChangeNotifier {
   Future<void> postMessage(String message) async {
     // post message in firebase
     await _db.postMessageInFirebase(message);
+
+    // reload
+    await loadAllPosts();
   }
 
   // fetch all posts
+  Future<void> loadAllPosts() async {
+    // get all posts from Firebase
+    final allPosts = await _db.getAllPostsFromFirebase();
+
+    // update local data
+    _allPosts = allPosts;
+
+    // update UI
+    notifyListeners();
+  }
+
+  // filter and return post given uid
+  List<Post> filterUserPosts(String uid) {
+    return _allPosts.where((post) => post.uid == uid).toList();
+  }
 }

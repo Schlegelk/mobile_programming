@@ -24,6 +24,12 @@ class MyBioBox extends StatelessWidget {
   Widget build(BuildContext context) {
     //Container
     return Container(
+      // padding outside
+      margin: const EdgeInsets.symmetric(horizontal: 25),
+
+      // padding inside
+      padding: const EdgeInsets.all(25),
+
       decoration: BoxDecoration(
         //color
         color: Theme.of(context).colorScheme.secondary,
@@ -31,9 +37,6 @@ class MyBioBox extends StatelessWidget {
         //curve corners
         borderRadius: BorderRadius.circular(8),
       ),
-
-      //padding inside
-      padding: const EdgeInsets.all(25),
 
       //Text
       child: Text(

@@ -131,7 +131,23 @@ class DatabaseService {
   // delete a post
 
   // get all post from firebase
+  Future<List<Post>> getAllPostsFromFirebase() async {
+    try {
+      // get all posts from firebase
+      QuerySnapshot snapshot = await _db
 
+          // go to collection -> Posts
+          .collection("Posts")
+          // chronological order
+          .orderBy("timestamp", descending: true)
+          // get this data
+          .get();
+      // return as a list of posts
+      return snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
+    } catch (e) {
+      return [];
+    }
+  }
   // get individual post
 
   /*
