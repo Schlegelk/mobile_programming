@@ -19,6 +19,7 @@ then it's much easier to manage and switch out different databases.
 import 'package:flutter/foundation.dart';
 import 'package:social_media/models/post.dart';
 import 'package:social_media/models/user.dart';
+import 'package:social_media/services/auth/auth_service.dart';
 import 'package:social_media/services/database/database_service.dart';
 
 class DatabaseProvider extends ChangeNotifier {
@@ -30,6 +31,7 @@ class DatabaseProvider extends ChangeNotifier {
 
   // Get db & auth services
   final _db = DatabaseService();
+  final _auth = AuthService();
 
   /*
   
@@ -75,6 +77,8 @@ class DatabaseProvider extends ChangeNotifier {
     // update local data
     _allPosts = allPosts;
 
+    // initialize local like data
+
     // update UI
     notifyListeners();
   }
@@ -82,5 +86,90 @@ class DatabaseProvider extends ChangeNotifier {
   // filter and return post given uid
   List<Post> filterUserPosts(String uid) {
     return _allPosts.where((post) => post.uid == uid).toList();
+  }
+
+  // delete post
+  Future<void> deletePost(String postId) async {
+    // delete from firebase
+    await _db.deletePostFromFirebase(postId);
+
+    // reload data from firebase
+    await loadAllPosts();
+  }
+
+  /*
+  LIKES
+  */
+
+  // local map to track like counts for each post
+  Map<String, int> _likeCounts = {
+    // for each post id: like count
+  };
+
+  // local list to track the posts liked by current user
+  List<String> _likedPosts = [];
+
+  // does current user like this post?
+  bool isPostLikedByCurrentUser(String postId) => _likedPosts.contains(postId);
+
+  // get like count of a post
+  int getLikeCount(String postId) => _likeCounts[postId] ?? 0;
+
+  // initialize like map locally
+  void initializeLikeMap() {
+    // get current user id
+    final currentUserID = _auth.getCurrentUid();
+
+    // clear liked posts (for new user sign in, clear local data) sehingga new user dapat me-like postnya
+    _likedPosts.clear();
+
+    // for each post get like data
+    for (var post in _allPosts) {
+      // update like count map
+      _likeCounts[post.id] = post.likeCount;
+
+      // if the current user already likes this post
+      if (post.likedBy.contains(currentUserID)) {
+        // add this post id to local list of liked posts
+        _likedPosts.add(post.id);
+      }
+    }
+  }
+
+  // toggle like
+  Future<void> toggleLike(String postId) async {
+    // this part will update local values first sehingga ui nya lebih smooth saat merespon
+
+    //store original values in case it fails
+    final likedPostsOriginal = _likedPosts;
+    final likeCountsOriginal = _likeCounts;
+
+    // perform like / unlike
+    if (_likedPosts.contains(postId)) {
+      _likedPosts.remove(postId);
+      _likeCounts[postId] = (_likeCounts[postId] ?? 0) - 1;
+    } else {
+      _likedPosts.add(postId);
+      _likeCounts[postId] = (_likeCounts[postId] ?? 0) + 1;
+    }
+
+    //update UI locally
+    notifyListeners();
+
+    // update likes in our database
+
+    // attempt like in database
+    try {
+      await _db.toggleLikeInFirebase(postId);
+    }
+
+    // revert back to initial state if update fails
+    catch (e) {
+      _likedPosts = likedPostsOriginal;
+      _likeCounts = likeCountsOriginal;
+
+      // update the UI
+      notifyListeners();
+    }
   }
 }
