@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media/components/my_loading_circle.dart';
 import 'package:social_media/services/auth/auth_service.dart';
+import 'package:social_media/services/database/database_service.dart';
 
 import '../components/my_button.dart';
 import '../components/my_text_field.dart';
@@ -24,40 +25,45 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  // access auth service
+// access auth service
   final _auth = AuthService();
+  final _db = DatabaseService();
 
-  // text controllers
+// text controllers
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController pwController = TextEditingController();
   final TextEditingController confirPwController = TextEditingController();
 
-  // register button tapped
+// register button tapped
   void register() async {
-    // password match -> create an user
+// password match -> create an user
     if (pwController.text == confirPwController.text) {
-      // show loading circle
+// show loading circle
       showLoadingCircle(context);
 
-      // attempt to register new user
+// attempt to register new user
       try {
-        // register
+//trying to register
         await _auth.registerEmailPassword(
           emailController.text,
           pwController.text,
         );
 
-        // succeed register
+// succeed register
         if (mounted) hideLoadingCircle(context);
+
+//once regristered,create and save user profile in database
+        await _db.saveUserInfoInFirebase(
+            name: nameController.text, email: emailController.text);
       }
 
-      // catch errors
+// catch errors
       catch (e) {
-        // finished register
+// finished register
         if (mounted) hideLoadingCircle(context);
 
-        // let user know if there is error
+// let user know if there is error
         if (mounted) {
           showDialog(
             context: context,
@@ -69,7 +75,7 @@ class _RegisterPageState extends State<RegisterPage> {
       }
     }
 
-    // password didn't match -> show error
+// password didn't match -> show error
     else {
       showDialog(
         context: context,
@@ -93,7 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 const SizedBox(height: 50),
 
-                // Icon / Logo
+// Icon / Logo
                 Icon(
                   Icons.lock_open_rounded,
                   size: 75,
@@ -102,7 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 50),
 
-                // create an account message
+// create an account message
                 Text(
                   "Let's create an account",
                   style: TextStyle(
@@ -113,7 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 25),
 
-                // tempat untuk mengisi nama
+// tempat untuk mengisi nama
                 MyTextField(
                   controller: nameController,
                   hintText: "Name",
@@ -122,7 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 10),
 
-                // tempat untuk mengisi email
+// tempat untuk mengisi email
                 MyTextField(
                   controller: emailController,
                   hintText: "Email",
@@ -131,7 +137,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 10),
 
-                // tempat untuk mengisi password
+// tempat untuk mengisi password
                 MyTextField(
                   controller: pwController,
                   hintText: "Enter password",
@@ -140,7 +146,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 10),
 
-                // tempat untuk mengisi confirm password
+// tempat untuk mengisi confirm password
                 MyTextField(
                   controller: confirPwController,
                   hintText: "Confirm password",
@@ -149,7 +155,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 25),
 
-                // sign up button
+// sign up button
                 MyButton(
                   text: "Register",
                   onTap: register,
@@ -157,7 +163,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 50),
 
-                // already a member? Login here!
+// already a member? Login here!
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -168,7 +174,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(width: 5),
 
-                    //pengguna dapat menekan tombol login page
+//pengguna dapat menekan tombol login page
                     GestureDetector(
                       onTap: widget.onTap,
                       child: Text(
