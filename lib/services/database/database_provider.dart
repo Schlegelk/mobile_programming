@@ -17,6 +17,7 @@ then it's much easier to manage and switch out different databases.
 */
 
 import 'package:flutter/foundation.dart';
+import 'package:social_media/models/post.dart';
 import 'package:social_media/models/user.dart';
 import 'package:social_media/services/database/database_service.dart';
 
@@ -43,5 +44,43 @@ class DatabaseProvider extends ChangeNotifier {
   // Update User Bio
   Future<void> updateBio(String bio) async {
     await _db.updateUserBioInFirebase(bio);
+  }
+
+  /*
+
+  POSTS
+
+  */
+
+  // local list of posts
+  List<Post> _allPosts = [];
+
+  // get posts
+  List<Post> get allPosts => _allPosts;
+
+  // post message
+  Future<void> postMessage(String message) async {
+    // post message in firebase
+    await _db.postMessageInFirebase(message);
+
+    // reload
+    await loadAllPosts();
+  }
+
+  // fetch all posts
+  Future<void> loadAllPosts() async {
+    // get all posts from Firebase
+    final allPosts = await _db.getAllPostsFromFirebase();
+
+    // update local data
+    _allPosts = allPosts;
+
+    // update UI
+    notifyListeners();
+  }
+
+  // filter and return post given uid
+  List<Post> filterUserPosts(String uid) {
+    return _allPosts.where((post) => post.uid == uid).toList();
   }
 }
