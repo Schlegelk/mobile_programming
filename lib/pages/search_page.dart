@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
+import 'package:social_media/services/database/database_provider.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
