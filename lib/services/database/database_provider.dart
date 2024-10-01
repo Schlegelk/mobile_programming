@@ -78,6 +78,7 @@ class DatabaseProvider extends ChangeNotifier {
     _allPosts = allPosts;
 
     // initialize local like data
+    initializeLikeMap();
 
     // update UI
     notifyListeners();
