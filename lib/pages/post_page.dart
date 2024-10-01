@@ -6,6 +6,7 @@ POST PAGE
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media/components/my_comment_tile.dart';
 import 'package:social_media/components/my_post_tile.dart';
 import 'package:social_media/helper/navigate_pages.dart';
 import 'package:social_media/models/post.dart';
@@ -61,9 +62,9 @@ class _PostPageState extends State<PostPage> {
                     final comment = allComments[index];
 
                     // return comment tile UI
-                    return Container(
-                      child: Text(comment.message),
-                    );
+                    return MyCommentTile(
+                        comment: comment,
+                        onUserTap: () => {goUserPage(context, comment.uid)});
                   },
                 ),
         ],
