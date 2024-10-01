@@ -15,7 +15,7 @@ class UsersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chat"),
+        title: Text("C H A T"),
       ),
       body: _buildUserList(),
     );
@@ -51,14 +51,14 @@ class UsersPage extends StatelessWidget {
       Map<String, dynamic> userData, BuildContext context) {
     // display all users except current user
     return UserTile(
-      text: userData["name"],
+      text: userData["email"],
       onTap: () {
         // tapped on a user -> go to chat page
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ChatPage(
-              receiverEmail: userData["name"],
+              receiverEmail: userData["email"],
             ),
           ),
         );
