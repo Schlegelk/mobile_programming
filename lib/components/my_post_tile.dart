@@ -183,6 +183,7 @@ LIKES BUTTON
 
                   //button => more options: delete
                   GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () => _showOptions,
                     child: Icon(
                       Icons.more_horiz,
@@ -212,7 +213,7 @@ LIKES BUTTON
                 GestureDetector(
                   onTap: _toggleLikePost,
                   child: likedByCurrentUser
-                      ? Icon(
+                      ? const Icon(
                           Icons.favorite,
                           color: Colors.red,
                         )
