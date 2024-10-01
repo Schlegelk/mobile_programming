@@ -17,6 +17,7 @@ then it's much easier to manage and switch out different databases.
 */
 
 import 'package:flutter/foundation.dart';
+import 'package:social_media/models/comment.dart';
 import 'package:social_media/models/post.dart';
 import 'package:social_media/models/user.dart';
 import 'package:social_media/services/auth/auth_service.dart';
@@ -172,5 +173,45 @@ class DatabaseProvider extends ChangeNotifier {
       // update the UI
       notifyListeners();
     }
+  }
+
+  /*
+  COMMENTS
+  {
+  postId1 : [comments1, comment2, ..],
+  postId2 : [comments1, comment2, ..],
+  postId3 : [comments1, comment2, ..],
+  }
+
+  */
+  // comment local list
+  final Map<String, List<Comment>> _comments = {};
+
+  // get comment as local
+  List<Comment> getComments(String postId) => _comments[postId] ?? [];
+
+  // fetch comment from firebase
+  Future<void> loadComments(String postId) async {
+    final allComments = await _db.getCommentsFromFirebase(postId);
+    _comments[postId] = allComments;
+
+    // update local data
+    _comments[postId] = allComments;
+
+    // update user view
+    notifyListeners();
+  }
+
+  // add a comment
+  Future<void> addComment(String postId, String message) async {
+    await _db.addCommentInFirebase(postId, message);
+    await loadComments(postId);
+  }
+
+  // delete a comment
+  Future<void> deleteComment(String postId, String commentId) async {
+    await _db
+        .deleteCommentFromFirebase(commentId); // delete comment from firebase
+    await loadComments(postId); // refresh comment
   }
 }
