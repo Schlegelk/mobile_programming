@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 /*
@@ -7,6 +8,7 @@ AUTHENTICATION SERVICE in firebase
 class AuthService {
   // get instance of the auth
   final _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // get current user & user id
   User? getCurrentUser() => _auth.currentUser;
@@ -19,6 +21,14 @@ class AuthService {
       final userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
+      );
+
+      // save user info in a separate doc
+      _firestore.collection("Users").doc(userCredential.user!.uid).set(
+        {
+          'uid': userCredential.user!.uid,
+          'email': email,
+        },
       );
 
       return userCredential;
