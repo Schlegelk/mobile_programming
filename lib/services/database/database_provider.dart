@@ -194,10 +194,6 @@ class DatabaseProvider extends ChangeNotifier {
   Future<void> loadComments(String postId) async {
     final allComments = await _db.getCommentsFromFirebase(postId);
     _comments[postId] = allComments;
-
-    // update local data
-    _comments[postId] = allComments;
-
     // update user view
     notifyListeners();
   }
@@ -209,7 +205,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   // delete a comment
-  Future<void> deleteComment(String postId, String commentId) async {
+  Future<void> deleteComment(String commentId, postId) async {
     await _db
         .deleteCommentFromFirebase(commentId); // delete comment from firebase
     await loadComments(postId); // refresh comment
