@@ -51,14 +51,14 @@ class UsersPage extends StatelessWidget {
       Map<String, dynamic> userData, BuildContext context) {
     // display all users except current user
     return UserTile(
-      text: userData["email"],
+      text: userData["name"],
       onTap: () {
         // tapped on a user -> go to chat page
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ChatPage(
-              receiverEmail: userData["email"],
+              receiverEmail: userData["name"],
             ),
           ),
         );
