@@ -162,21 +162,24 @@ LIKES BUTTON
                   const SizedBox(width: 10),
 
                   // name
-                  Text(
-                    widget.post.name,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Expanded(
+                    child: Text(widget.post.name,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis),
                   ),
 
                   const SizedBox(width: 5),
 
                   // username handle
-                  Text(
-                    '@${widget.post.username}',
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.primary),
+                  Expanded(
+                    child: Text('@${widget.post.username}',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary),
+                        overflow: TextOverflow.ellipsis,
+                        ),
                   ),
 
                   const Spacer(),
@@ -184,7 +187,7 @@ LIKES BUTTON
                   //button => more options: delete
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
-                    onTap: () => _showOptions,
+                    onTap: _showOptions,
                     child: Icon(
                       Icons.more_horiz,
                       color: Theme.of(context).colorScheme.primary,

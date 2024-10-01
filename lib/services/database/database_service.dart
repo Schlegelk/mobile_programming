@@ -182,7 +182,7 @@ class DatabaseService {
               List<String>.from(postSnapshot['likedBy'] ?? []);
 
           // get like count
-          int currentLikeCount = postSnapshot['likes'];
+          int currentLikeCount = postSnapshot['likeCount'];
 
           // if user has not liked this post yet -> then like
           if (!likedBy.contains(uid)) {
@@ -204,7 +204,7 @@ class DatabaseService {
 
           // update in firebase
           transaction.update(postDoc, {
-            'likes': currentLikeCount,
+            'likeCount': currentLikeCount,
             'likedBy': likedBy,
           });
         },
