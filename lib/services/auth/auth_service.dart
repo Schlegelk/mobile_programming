@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:social_media/services/database/database_service.dart';
 
 /*
 AUTHENTICATION SERVICE in firebase
@@ -64,4 +65,14 @@ class AuthService {
   }
 
   // delete account
+  Future<void> deleteAccount() async {
+    // get current uid
+    User? user = getCurrentUser();
+
+    if (user != null) {
+      await DatabaseService().deleteUserInfoFromFirebase(user.uid);
+
+      await user.delete();
+    }
+  }
 }

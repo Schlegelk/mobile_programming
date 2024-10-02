@@ -16,6 +16,7 @@ then it's much easier to manage and switch out different databases.
 
 */
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:social_media/models/comment.dart';
 import 'package:social_media/models/post.dart';
@@ -75,8 +76,12 @@ class DatabaseProvider extends ChangeNotifier {
     // get all posts from Firebase
     final allPosts = await _db.getAllPostsFromFirebase();
 
-    // update local data
-    _allPosts = allPosts;
+    // get blocked user
+    final blockedUserIds = await _db.getBlockedUsers();
+
+    // filter blocked user
+    _allPosts =
+        allPosts.where((post) => !blockedUserIds.contains(post.uid)).toList();
 
     // initialize local like data
     initializeLikeMap();
@@ -209,5 +214,54 @@ class DatabaseProvider extends ChangeNotifier {
     await _db
         .deleteCommentFromFirebase(commentId); // delete comment from firebase
     await loadComments(postId); // refresh comment
+  }
+
+  /*
+
+  Account Stuff
+
+  */
+
+  // local list of blocked users
+  List<UserProfile> _blockedUsers = [];
+
+  // get list of blocked users
+  List<UserProfile> getBlockedUsers() => _blockedUsers;
+
+  // fetch blocked users
+  Future<void> loadBlockedUsers() async {
+    // get list of blocked user
+    final blockedUserIds = await _db.getBlockedUsers();
+
+    final blockedUsersData = await Future.wait(
+        blockedUserIds.map((id) => _db.getUserFromFirebase(id)));
+
+    // return data as list
+    _blockedUsers = blockedUsersData.whereType<UserProfile>().toList();
+
+    // update UI
+    notifyListeners();
+  }
+
+  // block user
+  Future<void> blockUser(String userId) async {
+    await _db.blockUserInFirebase(userId); // use the blocked user method
+    await loadBlockedUsers();
+    await loadAllPosts();
+    notifyListeners();
+  }
+
+  // unblock user
+  Future<void> unblockUser(String userId) async {
+    await _db.unblockUserInFirebase(userId); // use the unblocked user method
+    await loadBlockedUsers();
+    await loadAllPosts();
+    notifyListeners();
+  }
+
+  // report user & post
+
+  Future<void> reportUser(String postId, userId) async {
+    await _db.reportUserInFirebse(postId, userId);
   }
 }

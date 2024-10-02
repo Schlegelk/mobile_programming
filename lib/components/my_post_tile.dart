@@ -103,6 +103,12 @@ LIKES BUTTON
     await databaseProvider.loadComments(widget.post.id);
   }
 
+  /*
+  SHOW OPTIONS:
+  case 1: this post belongs to current user
+  case 2: this post doesn't belong to current user
+  */
+
   //show options for post (titik tiga samping username)
   void _showOptions() {
     // check if this post is owned by the user or not
@@ -143,6 +149,7 @@ LIKES BUTTON
                     Navigator.pop(context);
 
                     // handle report action
+                    _reportPostConfirmationBox();
                   },
                 ),
 
@@ -155,6 +162,7 @@ LIKES BUTTON
                     Navigator.pop(context);
 
                     // handle block action
+                    _blockUserConfirmationBox();
                   },
                 )
               ],
@@ -170,6 +178,58 @@ LIKES BUTTON
         );
       },
     );
+  }
+
+  // report post confirmation
+  void _reportPostConfirmationBox() {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text("Report Post"),
+              content: const Text("Are you sure you want to report this post?"),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    // report user
+                    await databaseProvider.reportUser(
+                        widget.post.id, widget.post.uid);
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("User Blocked")));
+                  },
+                  child: const Text("Report"),
+                ),
+              ],
+            ));
+  }
+
+  // block user
+  void _blockUserConfirmationBox() {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+                title: const Text("Block User"),
+                content:
+                    const Text("are you sure you want to block this user?"),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("Cancel"),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      await databaseProvider.blockUser(widget.post.uid);
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("User Blocked")));
+                    },
+                    child: const Text("Block"),
+                  )
+                ]));
   }
 
   // build ui
