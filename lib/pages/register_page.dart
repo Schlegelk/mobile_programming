@@ -102,7 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   // Icon / Logo
                   Icon(
-                    Icons.lock_open_rounded,
+                    Icons.person,
                     size: 75,
                     color: Theme.of(context).colorScheme.primary,
                   ),

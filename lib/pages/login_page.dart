@@ -3,6 +3,7 @@ import 'package:social_media/components/my_button.dart';
 import 'package:social_media/components/my_loading_circle.dart';
 import 'package:social_media/components/my_text_field.dart';
 import 'package:social_media/services/auth/auth_service.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /*
 Login page
@@ -77,24 +78,36 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 50),
 
                   // Icon / Logo
-                  Icon(
-                    Icons.lock_open_rounded,
-                    size: 75,
-                    color: Theme.of(context).colorScheme.primary,
+                  CircleAvatar(
+                    radius: 75,
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: AssetImage('assets/logo.jpg'),
                   ),
 
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 10),
+
+                  Text(
+                    "Mingl",
+                    style: GoogleFonts.pacifico(
+                      textStyle: Theme.of(context).textTheme.displayLarge,
+                      fontSize: 50,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+
+                  const SizedBox(height: 60),
 
                   //welcome back message
                   Text(
                     "Welcome to Mingl app!",
-                    style: TextStyle(
+                    style: GoogleFonts.kanit(
                       color: Theme.of(context).colorScheme.primary,
-                      fontSize: 16,
+                      fontSize: 18,
                     ),
                   ),
 
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 20),
 
                   // tempat untuk mengisi email
                   MyTextField(
