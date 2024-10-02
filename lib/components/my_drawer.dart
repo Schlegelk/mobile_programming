@@ -109,7 +109,7 @@ class MyDrawer extends StatelessWidget {
               // settings list tile
               MyDrawerTile(
                 title: "S E T T I N G S",
-                icon: Icons.person,
+                icon: Icons.settings,
                 onTap: () {
                   // pop menu drawer
                   Navigator.pop(context);
