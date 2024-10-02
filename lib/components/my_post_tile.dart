@@ -78,6 +78,8 @@ LIKES BUTTON
             onPressed: () async {
               // add post to firebase
               await _addComment();
+              // load new comment
+              await _loadComments();
             },
             onPressedText: "Post"));
   }
@@ -87,7 +89,7 @@ LIKES BUTTON
     // does nothing if text is empty
     if (_commentController.text.trim().isEmpty) return;
 
-    // attempt to add cimment
+    // attempt to add comment
     try {
       await databaseProvider.addComment(
           widget.post.id, _commentController.text.trim());

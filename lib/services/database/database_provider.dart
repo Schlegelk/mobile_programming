@@ -199,7 +199,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   // add a comment
-  Future<void> addComment(String postId, String message) async {
+  Future<void> addComment(String postId, message) async {
     await _db.addCommentInFirebase(postId, message);
     await loadComments(postId);
   }
