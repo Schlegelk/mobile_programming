@@ -12,6 +12,7 @@ _________________________________________________
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media/components/my_input_alert_box.dart';
 import 'package:social_media/models/post.dart';
 import 'package:social_media/services/auth/auth_service.dart';
 import 'package:social_media/services/database/database_provider.dart';
@@ -37,6 +38,14 @@ class _MyPostTileState extends State<MyPostTile> {
   late final databaseProvider =
       Provider.of<DatabaseProvider>(context, listen: false);
 
+  // widget startup
+  @override
+  void initState() {
+    super.initState();
+
+    _loadComments();
+  }
+
   /*
 LIKES BUTTON
   */
@@ -48,6 +57,48 @@ LIKES BUTTON
     } catch (e) {
       print(e);
     }
+  }
+
+  /*
+
+  Comment
+
+  */
+
+  // comment text controller
+  final _commentController = TextEditingController();
+
+  // create new comment
+  void _openNewCommentBox() {
+    showDialog(
+        context: context,
+        builder: (context) => MyInputAlertBox(
+            textController: _commentController,
+            hintText: "Type a comment...",
+            onPressed: () async {
+              // add post to firebase
+              await _addComment();
+            },
+            onPressedText: "Post"));
+  }
+
+  // user tapping the post to add comment
+  Future<void> _addComment() async {
+    // does nothing if text is empty
+    if (_commentController.text.trim().isEmpty) return;
+
+    // attempt to add cimment
+    try {
+      await databaseProvider.addComment(
+          widget.post.id, _commentController.text.trim());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // load comments inside the post
+  Future<void> _loadComments() async {
+    await databaseProvider.loadComments(widget.post.id);
   }
 
   //show options for post (titik tiga samping username)
@@ -129,6 +180,9 @@ LIKES BUTTON
     // listen to like count
     int likeCount = listeningProvider.getLikeCount(widget.post.id);
 
+    // listen to comment count
+    int commentCount = listeningProvider.getComments(widget.post.id).length;
+
     // container
     return GestureDetector(
       onTap: widget.onPostTap,
@@ -175,11 +229,12 @@ LIKES BUTTON
 
                   // username handle
                   Expanded(
-                    child: Text('@${widget.post.username}',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
-                        overflow: TextOverflow.ellipsis,
-                        ),
+                    child: Text(
+                      '@${widget.post.username}',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
 
                   const Spacer(),
@@ -212,28 +267,60 @@ LIKES BUTTON
             // buttons -> like & comment
             Row(
               children: [
-                // like button
-                GestureDetector(
-                  onTap: _toggleLikePost,
-                  child: likedByCurrentUser
-                      ? const Icon(
-                          Icons.favorite,
-                          color: Colors.red,
-                        )
-                      : Icon(
-                          Icons.favorite_border,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                // like row
+                SizedBox(
+                  width: 60,
+                  child: Row(
+                    children: [
+                      // like button
+                      GestureDetector(
+                        onTap: _toggleLikePost,
+                        child: likedByCurrentUser
+                            ? const Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                              )
+                            : Icon(
+                                Icons.favorite_border,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                      ),
+
+                      const SizedBox(width: 5),
+
+                      // like count
+                      Text(
+                        likeCount != 0 ? likeCount.toString() : '',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary),
+                      ),
+                    ],
+                  ),
                 ),
 
-                const SizedBox(width: 5),
+                // comment row
+                Row(
+                  children: [
+                    // comment button
+                    GestureDetector(
+                      onTap: _openNewCommentBox,
+                      child: Icon(
+                        Icons.comment,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
 
-                // like count
-                Text(
-                  likeCount != 0 ? likeCount.toString() : '',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.primary),
-                ),
+                    const SizedBox(width: 5),
+
+                    // coment count
+                    Text(
+                      commentCount != 0 ? commentCount.toString() : '',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                )
               ],
             )
           ],
