@@ -22,9 +22,9 @@ class PostPage extends StatefulWidget {
 
 class _PostPageState extends State<PostPage> {
   // provider
-  late final listeningProvider =
+  late final listeningProvider = Provider.of<DatabaseProvider>(context);
+  late final databaseProvider =
       Provider.of<DatabaseProvider>(context, listen: false);
-  late final database = Provider.of<DatabaseProvider>(context, listen: false);
 
   // build ui
   @override
