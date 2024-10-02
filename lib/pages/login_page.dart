@@ -4,6 +4,7 @@ import 'package:social_media/components/my_loading_circle.dart';
 import 'package:social_media/components/my_text_field.dart';
 import 'package:social_media/services/auth/auth_service.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'forgot_pw_page.dart';
 
 /*
 Login page
@@ -130,11 +131,23 @@ class _LoginPageState extends State<LoginPage> {
                   // forgot password
                   Align(
                     alignment: Alignment.centerRight,
-                    child: Text(
-                      "Forgot Password?",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.bold,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ForgotPasswordPage();
+                            },
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Forgot Password?",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
