@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media/components/my_drawer_tile.dart';
 import 'package:social_media/pages/profile_page.dart';
+import 'package:social_media/pages/search_page.dart';
 import 'package:social_media/pages/settings_page.dart';
 import 'package:social_media/pages/users_page.dart';
 import 'package:social_media/services/auth/auth_service.dart';
@@ -105,6 +106,18 @@ class MyDrawer extends StatelessWidget {
               ),
 
               // search list tile
+              MyDrawerTile(
+                title: "S E A R C H",
+                icon: Icons.search,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SearchPage(),
+                    ),
+                  );
+                },
+              ),
 
               // settings list tile
               MyDrawerTile(

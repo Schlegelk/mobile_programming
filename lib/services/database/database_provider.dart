@@ -16,6 +16,7 @@ then it's much easier to manage and switch out different databases.
 
 */
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:social_media/models/comment.dart';
 import 'package:social_media/models/post.dart';
@@ -57,9 +58,11 @@ class DatabaseProvider extends ChangeNotifier {
 
   // local list of posts
   List<Post> _allPosts = [];
+  List<Post> _followingPosts = [];
 
   // get posts
   List<Post> get allPosts => _allPosts;
+  List<Post> get followingPosts => _followingPosts;
 
   // post message
   Future<void> postMessage(String message) async {
@@ -80,6 +83,9 @@ class DatabaseProvider extends ChangeNotifier {
     _allPosts =
         allPosts.where((post) => !blockedUserIds.contains(post.uid)).toList();
 
+    // filter the following post
+    await loadFollowingPosts();
+
     // initialize local like data
     initializeLikeMap();
 
@@ -90,6 +96,18 @@ class DatabaseProvider extends ChangeNotifier {
   // filter and return post given uid
   List<Post> filterUserPosts(String uid) {
     return _allPosts.where((post) => post.uid == uid).toList();
+  }
+
+  // load following posts
+  Future<void> loadFollowingPosts() async {
+    String currentUid = _auth.getCurrentUid();
+
+    // get list of uids
+    final followingUserIds = await _db.getFollowingUidsFromFirebase(currentUid);
+
+    // filter posts
+    _followingPosts =
+        _allPosts.where((post) => followingUserIds.contains(post.uid)).toList();
   }
 
   // delete post
@@ -512,6 +530,25 @@ class DatabaseProvider extends ChangeNotifier {
       _followingProfile[uid] = followingProfiles;
 
       // update UI
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  /*
+  SEARCH USERS
+  */
+  List<UserProfile> _searchResults = [];
+
+  List<UserProfile> get searchResult => _searchResults;
+
+  Future<void> searchUsers(String searchName) async {
+    try {
+      final result = await _db.searchUsersFromFirebase(searchName);
+
+      _searchResults = result;
+
       notifyListeners();
     } catch (e) {
       print(e);

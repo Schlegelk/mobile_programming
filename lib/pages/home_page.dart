@@ -67,25 +67,38 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     // Scaffold
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      drawer: MyDrawer(),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        drawer: MyDrawer(),
 
-      // App Bar
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("H O M E"),
-        foregroundColor: Theme.of(context).colorScheme.primary,
+        // App Bar
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("H O M E"),
+          foregroundColor: Theme.of(context).colorScheme.primary,
+          bottom: TabBar(
+            dividerColor: Colors.transparent,
+            tabs: [Tab(text: "For You"), Tab(text: "Following")],
+            labelColor: Color.fromARGB(255, 135, 183, 222),
+            labelStyle: TextStyle(fontWeight: FontWeight.bold),
+            indicatorColor: Theme.of(context).colorScheme.secondary,
+          ),
+        ),
+
+        // Floating Action Button
+        floatingActionButton: FloatingActionButton(
+          onPressed: _openPostMessageBox,
+          child: Icon(Icons.add),
+        ),
+
+        // Body: list of all posts
+        body: TabBarView(children: [
+          _buildPostList(listeningProvider.allPosts),
+          _buildPostList(listeningProvider.followingPosts)
+        ]),
       ),
-
-      // Floating Action Button
-      floatingActionButton: FloatingActionButton(
-        onPressed: _openPostMessageBox,
-        child: Icon(Icons.add),
-      ),
-
-      // Body: list of all posts
-      body: _buildPostList(listeningProvider.allPosts),
     );
   }
 

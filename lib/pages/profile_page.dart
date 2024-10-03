@@ -212,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
 
             // follow-unfollow button
-            if (user != null && user!.uid != currentUserId)
+            if (!_isLoading && user!.uid != currentUserId)
               MyFollowButton(
                 onPressed: toggleFollow,
                 isFollowing: _isFollowing,

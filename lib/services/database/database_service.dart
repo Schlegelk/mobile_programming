@@ -434,4 +434,16 @@ class DatabaseService {
   SEARCH
 
   */
+  Future<List<UserProfile>> searchUsersFromFirebase(String searchName) async {
+    try {
+      QuerySnapshot snapshot = await _db
+          .collection("Users")
+          .where('username', isGreaterThanOrEqualTo: searchName)
+          .where('username', isLessThanOrEqualTo: '$searchName\uf8ff')
+          .get();
+      return snapshot.docs.map((doc) => UserProfile.fromDocument(doc)).toList();
+    } catch (e) {
+      return [];
+    }
+  }
 }
