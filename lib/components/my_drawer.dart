@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:social_media/components/my_drawer_tile.dart';
 import 'package:social_media/pages/profile_page.dart';
 import 'package:social_media/pages/settings_page.dart';
+import 'package:social_media/pages/users_page.dart';
 import 'package:social_media/services/auth/auth_service.dart';
 
 /*
@@ -69,6 +70,21 @@ class MyDrawer extends StatelessWidget {
                 },
               ),
 
+              MyDrawerTile(
+                title: "C H A T",
+                icon: Icons.message,
+                onTap: () {
+                  // pop menu drawer
+                  Navigator.pop(context);
+
+                  // go to user page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UsersPage()),
+                  );
+                },
+              ),
+
               // profile list tile
               MyDrawerTile(
                 title: "P R O F I L E",
@@ -93,7 +109,7 @@ class MyDrawer extends StatelessWidget {
               // settings list tile
               MyDrawerTile(
                 title: "S E T T I N G S",
-                icon: Icons.person,
+                icon: Icons.settings,
                 onTap: () {
                   // pop menu drawer
                   Navigator.pop(context);

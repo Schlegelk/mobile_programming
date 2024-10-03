@@ -17,6 +17,7 @@ then it's much easier to manage and switch out different databases.
 */
 
 import 'package:flutter/foundation.dart';
+import 'package:social_media/models/comment.dart';
 import 'package:social_media/models/post.dart';
 import 'package:social_media/models/user.dart';
 import 'package:social_media/services/auth/auth_service.dart';
@@ -74,10 +75,13 @@ class DatabaseProvider extends ChangeNotifier {
     // get all posts from Firebase
     final allPosts = await _db.getAllPostsFromFirebase();
 
-    // update local data
-    _allPosts = allPosts;
+    // get blocked user ids
+    final blockedUserIds = await _db.getBlockedUsersFromFirebase();
+    _allPosts =
+        allPosts.where((post) => !blockedUserIds.contains(post.uid)).toList();
 
     // initialize local like data
+    initializeLikeMap();
 
     // update UI
     notifyListeners();
@@ -171,6 +175,85 @@ class DatabaseProvider extends ChangeNotifier {
       // update the UI
       notifyListeners();
     }
+  }
+
+  /*
+  COMMENTS
+  {
+  postId1 : [comments1, comment2, ..],
+  postId2 : [comments1, comment2, ..],
+  postId3 : [comments1, comment2, ..],
+  }
+
+  */
+  // comment local list
+  final Map<String, List<Comment>> _comments = {};
+
+  // get comment as local
+  List<Comment> getComments(String postId) => _comments[postId] ?? [];
+
+  // fetch comment from firebase
+  Future<void> loadComments(String postId) async {
+    final allComments = await _db.getCommentsFromFirebase(postId);
+    _comments[postId] = allComments;
+    // update user view
+    notifyListeners();
+  }
+
+  // add a comment
+  Future<void> addComment(String postId, message) async {
+    await _db.addCommentInFirebase(postId, message);
+    await loadComments(postId);
+  }
+
+  // delete a comment
+  Future<void> deleteComment(String commentId, postId) async {
+    await _db
+        .deleteCommentFromFirebase(commentId); // delete comment from firebase
+    await loadComments(postId); // refresh comment
+  }
+
+  /*
+    account methods
+  */
+  // local list of blocked users
+  List<UserProfile> _blockedUsers = [];
+
+  // get list of blocked users
+  List<UserProfile> getBlockedUsers() => _blockedUsers;
+
+  // fetch blocked users
+  Future<void> loadBlockedUsers() async {
+    final blockedUserIds = await _db.getBlockedUsersFromFirebase();
+
+    final blockedUsersData = await Future.wait(
+        blockedUserIds.map((userId) => _db.getUserFromFirebase(userId)));
+
+    // return as list
+    _blockedUsers = blockedUsersData.whereType<UserProfile>().toList();
+
+    notifyListeners();
+  }
+
+  // block user
+  Future<void> blockUser(String userId) async {
+    await _db.blockUserInFirebase(userId);
+    await loadBlockedUsers();
+    await loadAllPosts();
+    notifyListeners();
+  }
+
+  // unblock user
+  Future<void> unblockUser(String userId) async {
+    await _db.unblockUserInFirebase(userId);
+    await loadBlockedUsers();
+    await loadAllPosts();
+    notifyListeners();
+  }
+
+  // report user & post
+  Future<void> reportUser(String postId, userId) async {
+    await _db.reportUserInFirebase(postId, userId);
   }
 
   /*
