@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:social_media/models/user.dart';
+import 'package:social_media/pages/profile_page.dart';
 
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
+class MyUserTile extends StatelessWidget {
+  final UserProfile user;
+
+  const MyUserTile({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +17,7 @@ class MyWidget extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Theme.of(context).colorScheme.inversePrimary,
-            blurRadius: 6,
+            blurRadius: 0,
             offset: const Offset(0, 3),
           ),
         ],
@@ -22,14 +26,12 @@ class MyWidget extends StatelessWidget {
         padding: const EdgeInsets.all(5.0),
         child: ListTile(
           // test name
-          title: const Text("Bob"),
+          title: Text(user.name),
           titleTextStyle:
               TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
-
-          subtitle: const Text('@bob_01'),
+          subtitle: Text('@${user.username}'),
           subtitleTextStyle:
               TextStyle(color: Theme.of(context).colorScheme.primary),
-
           leading: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Icon(
@@ -37,6 +39,14 @@ class MyWidget extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfilePage(uid: user.uid),
+            ),
+          ),
+          trailing: Icon(Icons.arrow_forward,
+              color: Theme.of(context).colorScheme.primary),
         ),
       ),
     );
