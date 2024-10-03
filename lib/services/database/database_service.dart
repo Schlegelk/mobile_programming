@@ -125,7 +125,7 @@ class DatabaseService {
       if (likedBy.contains(uid)) {
         batch.update(post.reference, {
           'likedBy': FieldValue.arrayRemove([uid]),
-          'liked': FieldValue.increment(-1),
+          'likeCount': FieldValue.increment(-1),
         });
       }
     }
@@ -353,7 +353,7 @@ class DatabaseService {
         .set({});
   }
 
-  // unblockk user
+  // unblock user
   Future<void> unblockUserInFirebase(String userId) async {
     final currentUserId = _auth.currentUser!.uid;
 

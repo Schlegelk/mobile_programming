@@ -48,9 +48,9 @@ class SettingsPage extends StatelessWidget {
           // Block users tile
           MySettingsTile(
               title: "Blocked Users",
-              action: GestureDetector(
-                  onTap: () => goBlockedUsersPage(context),
-                  child: Icon(Icons.arrow_forward,
+              action: IconButton(
+                  onPressed: () => goBlockedUsersPage(context),
+                  icon: Icon(Icons.arrow_forward,
                       color: Theme.of(context).colorScheme.primary))),
 
           // Account settings tile
