@@ -29,6 +29,7 @@ class AuthService {
           'uid': userCredential.user!.uid,
           'email': email,
         },
+        SetOptions(merge: true), // prevent overwriting existing data
       );
 
       return userCredential;
