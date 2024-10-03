@@ -119,7 +119,7 @@ class DatabaseService {
       if (likedBy.contains(uid)) {
         batch.update(post.reference, {
           'likedBy': FieldValue.arrayRemove([uid]),
-          'likes': FieldValue.increment(-1),
+          'likeCount': FieldValue.increment(-1),
         });
       }
     }
