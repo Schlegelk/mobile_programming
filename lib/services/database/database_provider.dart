@@ -75,8 +75,10 @@ class DatabaseProvider extends ChangeNotifier {
     // get all posts from Firebase
     final allPosts = await _db.getAllPostsFromFirebase();
 
-    // update local data
-    _allPosts = allPosts;
+    // get blocked user ids
+    final blockedUserIds = await _db.getBlockedUsersFromFirebase();
+    _allPosts =
+        allPosts.where((post) => !blockedUserIds.contains(post.uid)).toList();
 
     // initialize local like data
     initializeLikeMap();
@@ -209,5 +211,48 @@ class DatabaseProvider extends ChangeNotifier {
     await _db
         .deleteCommentFromFirebase(commentId); // delete comment from firebase
     await loadComments(postId); // refresh comment
+  }
+
+  /*
+    account methods
+  */
+  // local list of blocked users
+  List<UserProfile> _blockedUsers = [];
+
+  // get list of blocked users
+  List<UserProfile> getBlockedUsers() => _blockedUsers;
+
+  // fetch blocked users
+  Future<void> loadBlockedUsers() async {
+    final blockedUserIds = await _db.getBlockedUsersFromFirebase();
+
+    final blockedUsersData = await Future.wait(
+        blockedUserIds.map((userId) => _db.getUserFromFirebase(userId)));
+
+    // return as list
+    _blockedUsers = blockedUsersData.whereType<UserProfile>().toList();
+
+    notifyListeners();
+  }
+
+  // block user
+  Future<void> blockUser(String userId) async {
+    await _db.blockUserInFirebase(userId);
+    await loadBlockedUsers();
+    await loadAllPosts();
+    notifyListeners();
+  }
+
+  // unblock user
+  Future<void> unblockUser(String userId) async {
+    await _db.unblockUserInFirebase(userId);
+    await loadBlockedUsers();
+    await loadAllPosts();
+    notifyListeners();
+  }
+
+  // report user & post
+  Future<void> reportUser(String postId, userId) async {
+    await _db.reportUserInFirebase(postId, userId);
   }
 }

@@ -91,6 +91,42 @@ class DatabaseService {
     }
   }
 
+  // delete account
+  Future<void> deleteUserInfoFromFirebase(String uid) async {
+    WriteBatch batch = _db.batch();
+    DocumentReference userDoc = _db.collection('Users').doc(uid);
+    batch.delete(userDoc);
+
+    // delete user post
+    QuerySnapshot userPosts =
+        await _db.collection("Posts").where('uid', isEqualTo: uid).get();
+    for (var post in userPosts.docs) {
+      batch.delete(post.reference);
+    }
+
+    // delete user comment
+    QuerySnapshot userComments =
+        await _db.collection("Comments").where('uid', isEqualTo: uid).get();
+    for (var comment in userComments.docs) {
+      batch.delete(comment.reference);
+    }
+    // delete user likes
+    QuerySnapshot allPosts = await _db.collection("Posts").get();
+    for (QueryDocumentSnapshot post in allPosts.docs) {
+      Map<String, dynamic> postData = post.data() as Map<String, dynamic>;
+      var likedBy = postData['likedBy'] as List<dynamic> ?? [];
+
+      if (likedBy.contains(uid)) {
+        batch.update(post.reference, {
+          'likedBy': FieldValue.arrayRemove([uid]),
+          'likes': FieldValue.increment(-1),
+        });
+      }
+    }
+
+    await batch.commit();
+  }
+
   /* 
 
   POST MESSAGE
@@ -277,6 +313,61 @@ class DatabaseService {
   ACCOUNT STAFF
   
   */
+  // report user
+  Future<void> reportUserInFirebase(String postId, userId) async {
+    // get current user id
+    final currentUserId = _auth.currentUser!.uid;
+    //create a report
+    final report = {
+      'reportedBy': currentUserId,
+      'messageId': postId,
+      'messageOwnerId': userId,
+      'timestamp': FieldValue.serverTimestamp()
+    };
+
+    // update in firestore
+    await _db.collection("Reports").add(report);
+  }
+
+  // block user
+  Future<void> blockUserInFirebase(String userId) async {
+    // get current user id
+    final currentUserId = _auth.currentUser!.uid;
+    //create a report
+    await _db
+        .collection("Users")
+        .doc(currentUserId)
+        .collection("BlockedUsers")
+        .doc(userId)
+        .set({});
+  }
+
+  // unblock user
+  Future<void> unblockUserInFirebase(String blockedUserId) async {
+    // get current user id
+    final currentUserId = _auth.currentUser!.uid;
+    //create a report
+    await _db
+        .collection("Users")
+        .doc(currentUserId)
+        .collection("BlockedUsers")
+        .doc(blockedUserId)
+        .delete();
+  }
+
+  // get blocked user
+  Future<List<String>> getBlockedUsersFromFirebase() async {
+    // get current user id
+    final currentUserId = _auth.currentUser!.uid;
+    //create a report
+    QuerySnapshot snapshot = await _db
+        .collection("Users")
+        .doc(currentUserId)
+        .collection("BlockedUsers")
+        .get();
+    // return as data from firebase as list of comments
+    return snapshot.docs.map((doc) => doc.id).toList();
+  }
 
   /*
 

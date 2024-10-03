@@ -143,6 +143,7 @@ LIKES BUTTON
                     Navigator.pop(context);
 
                     // handle report action
+                    _reportPostConfirmationBox();
                   },
                 ),
 
@@ -155,6 +156,7 @@ LIKES BUTTON
                     Navigator.pop(context);
 
                     // handle block action
+                    _blockUserConfirmationBox();
                   },
                 )
               ],
@@ -169,6 +171,76 @@ LIKES BUTTON
           ),
         );
       },
+    );
+  }
+
+  void _reportPostConfirmationBox() {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text("Report Post"),
+              content: const Text("Are you sure you want to report this post?"),
+              actions: [
+                // cancel button
+                TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("Cancel")),
+
+                // report button
+                TextButton(
+                    onPressed: () async {
+                      // close box
+                      Navigator.pop(context);
+
+                      // handle report action
+                      await databaseProvider.reportUser(
+                          widget.post.id, widget.post.uid);
+
+                      // notify user
+                      _showSuccessDialog();
+                    },
+                    child: const Text("Report"))
+              ],
+            ));
+  }
+
+  void _blockUserConfirmationBox() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Block user"),
+        content: const Text("Are you sure you want to block this user?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await databaseProvider.blockUser(widget.post.id);
+              _showSuccessDialog();
+            },
+            child: const Text("Block"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Success"),
+        content: const Text("Task successful"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("OK"),
+          ),
+        ],
+      ),
     );
   }
 
