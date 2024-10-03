@@ -74,7 +74,7 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
         // body
         body: blockedUsers.isEmpty
             ? const Center(
-                child: Text("No blocked users..."),
+                child: Text("No blocked users"),
               )
             : ListView.builder(
                 itemCount: blockedUsers.length,

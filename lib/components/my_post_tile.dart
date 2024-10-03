@@ -197,7 +197,7 @@ LIKES BUTTON
                         widget.post.id, widget.post.uid);
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Post Reported!")));
+                        const SnackBar(content: Text("User Blocked")));
                   },
                   child: const Text("Report"),
                 ),
@@ -223,7 +223,7 @@ LIKES BUTTON
                       await databaseProvider.blockUser(widget.post.uid);
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("User Blocked!")));
+                          const SnackBar(content: Text("User Blocked")));
                     },
                     child: const Text("Block"),
                   )

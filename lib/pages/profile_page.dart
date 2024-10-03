@@ -203,7 +203,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                       // post tile UI
                       return MyPostTile(
-                        post: post,
+                        post: post, 
                         onUserTap: () {},
                         onPostTap: () => goPostPage(context, post),
                       );
