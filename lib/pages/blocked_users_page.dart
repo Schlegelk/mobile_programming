@@ -48,20 +48,19 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
                 await databaseProvider.unblockUser(userId);
 
                 // notify user
-                _showSuccessDialog();
+                _showUnblockDialog();
               },
-              child: const Text("Block"))
+              child: const Text("Unblock"))
         ],
       ),
     );
   }
 
-  void _showSuccessDialog() {
+  void _showUnblockDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Success"),
-        content: const Text("Task successful"),
+        title: const Text("User Unblocked"),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

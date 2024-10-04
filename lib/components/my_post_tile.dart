@@ -197,7 +197,10 @@ LIKES BUTTON
                           widget.post.id, widget.post.uid);
 
                       // notify user
-                      _showSuccessDialog();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("User Reported")
+                        ),
+                      );
                     },
                     child: const Text("Report"))
               ],
@@ -218,8 +221,9 @@ LIKES BUTTON
           TextButton(
             onPressed: () async {
               Navigator.pop(context);
-              await databaseProvider.blockUser(widget.post.id);
-              _showSuccessDialog();
+              await databaseProvider.blockUser(widget.post.uid);
+
+              _showBlockDialog();
             },
             child: const Text("Block"),
           ),
@@ -228,12 +232,11 @@ LIKES BUTTON
     );
   }
 
-  void _showSuccessDialog() {
+  void _showBlockDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Success"),
-        content: const Text("Task successful"),
+        title: const Text("User Blocked"),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

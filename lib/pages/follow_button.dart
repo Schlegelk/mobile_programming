@@ -10,15 +10,15 @@ class MyFollowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(25.0),
+      padding: const EdgeInsets.all(25.0),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: MaterialButton(
-          padding: EdgeInsets.all(25),
+          padding: const EdgeInsets.all(25),
           onPressed: onPressed,
           color: isFollowing
               ? Theme.of(context).colorScheme.primary
-              : Color.fromARGB(255, 130, 189, 237),
+              : const Color.fromARGB(255, 130, 189, 237),
           child: Text(
             isFollowing ? "Unfollow" : "Follow",
             style: TextStyle(

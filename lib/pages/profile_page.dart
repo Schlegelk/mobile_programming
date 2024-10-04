@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media/components/my_bio_box.dart';
 import 'package:social_media/components/my_input_alert_box.dart';
@@ -230,6 +229,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
+                  if(user != null && user!.uid == currentUserId)
                   GestureDetector(
                     onTap: _showEditBioBox,
                     child: Icon(

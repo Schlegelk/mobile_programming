@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media/components/user_tile.dart';
 import 'package:social_media/pages/chat_page.dart';
-import 'package:social_media/services/auth/auth_service.dart';
 import 'package:social_media/services/chat/chat_service.dart';
 
 class UsersPage extends StatelessWidget {
@@ -9,7 +8,6 @@ class UsersPage extends StatelessWidget {
 
   // chat & auth service
   final ChatService _chatService = ChatService();
-  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {

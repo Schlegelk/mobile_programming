@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 
 class MyProfileStats extends StatelessWidget {
   final int postCount;

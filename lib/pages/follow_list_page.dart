@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media/components/my_user_tile.dart';
 import 'package:social_media/models/user.dart';

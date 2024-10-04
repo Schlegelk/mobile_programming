@@ -16,7 +16,6 @@ then it's much easier to manage and switch out different databases.
 
 */
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:social_media/models/comment.dart';
 import 'package:social_media/models/post.dart';
