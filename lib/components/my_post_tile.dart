@@ -197,10 +197,7 @@ LIKES BUTTON
                           widget.post.id, widget.post.uid);
 
                       // notify user
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("User Reported")
-                        ),
-                      );
+                      _showReportDialog();
                     },
                     child: const Text("Report"))
               ],
@@ -237,6 +234,21 @@ LIKES BUTTON
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("User Blocked"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showReportDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("User Reported"),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
