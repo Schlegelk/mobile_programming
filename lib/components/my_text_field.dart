@@ -11,12 +11,14 @@ class MyTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final bool obscureText;
+  final FocusNode? focusNode;
 
   const MyTextField({
     super.key,
     required this.controller,
     required this.hintText,
     required this.obscureText,
+    this.focusNode,
   });
 
   @override
@@ -25,6 +27,7 @@ class MyTextField extends StatelessWidget {
       controller: controller,
       obscureText:
           obscureText, //untuk pengisian pada password sehingga berubah menjadi **** sewaktu diketik
+      focusNode: focusNode,
       decoration: InputDecoration(
         // border sewaktu tidak di klik atau dalam kondisi tidak ingin diisi
         enabledBorder: OutlineInputBorder(
