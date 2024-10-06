@@ -30,7 +30,14 @@ class MyUserList extends StatelessWidget {
             const SizedBox(width: 20),
 
             // user name
-            Text(text),
+            Expanded(
+              child: Text(
+                text, 
+                style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                ),
+                )
+              ),
           ],
         ),
       ),

@@ -13,6 +13,7 @@ _________________________________________________
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media/components/my_input_alert_box.dart';
+import 'package:social_media/helper/time_formatter.dart';
 import 'package:social_media/models/post.dart';
 import 'package:social_media/services/auth/auth_service.dart';
 import 'package:social_media/services/database/database_provider.dart';
@@ -409,9 +410,17 @@ LIKES BUTTON
                       ),
                     ),
                   ],
-                )
+                ),
+
+                const Spacer(),
+                // timestamp
+                Text(
+                  formatTimestamp(widget.post.timestamp),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
               ],
-            )
+            ),
           ],
         ),
       ),
